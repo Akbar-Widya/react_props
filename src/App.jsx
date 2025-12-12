@@ -1,16 +1,7 @@
 import Avatar from './Avatar';
 
-function Card({ children }) {
-  return (
-    <div className="card">
-      {children}
-    </div>
-  );
-}
-
 export default function App() {
   return (
-    <Card>
       <Avatar
         size={100}
         person={{ 
@@ -18,6 +9,5 @@ export default function App() {
           imageId: 'YfeOqp2'
         }}
       />
-    </Card>
   );
 }
