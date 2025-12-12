@@ -1,41 +1,23 @@
-import * as React from "react";
-// topic: children as a function
-// also called render prop
-// there'll be part 2 of this topic on the later commit
+const userList = [
+   { id: 1, name: "Alice" },
+   { id: 2, name: "Bob" },
+   { id: 3, name: "Charlie" },
+]
 
-const App = () => (
-  <div>
-    <h1>US Dollar to Euro:</h1>
-    <Amount>{(amount) => <Euro amount={amount} />}</Amount>
-
-    <h1>US Dollar to Pound:</h1>
-    <Amount>{(amount) => <Pound amount={amount} />}</Amount>
-  </div>
-);
-
-const Amount = ({ children }) => {
-  const [amount, setAmount] = React.useState(0);
-
-  const handleIncrement = () => setAmount(amount + 1);
-  const handleDecrement = () => setAmount(amount - 1);
-
-  return (
-    <div>
-      <button type="button" onClick={handleIncrement}>
-        +
-      </button>
-      <button type="button" onClick={handleDecrement}>
-        -
-      </button>
-
-      <p>US Dollar: {amount}</p>
-      {children(amount)}
-    </div>
-  );
+const App = () => {
+   return <List users={userList} />;
 };
 
-const Euro = ({ amount }) => <p>Euro: {amount * 0.86}</p>;
+const List = ({ users }) => {
+   return <ul>{users.map(user => <Item key={user.id} id={user.id}>{user.name}</Item>)}</ul>;
+};
 
-const Pound = ({ amount }) => <p>Pound: {amount * 0.76}</p>;
+const Item = ({id, children}) => {
+   return <p>{id} {children}</p>
+}
 
 export default App;
+
+// topic: react props pitfalls
+// react props key is undefined, can't read of id
+// the solution is to pass id as a separate prop, because key is not passed as a prop, just a list item identifier
