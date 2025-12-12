@@ -1,6 +1,6 @@
 import { getImageUrl } from "./utils";
 
-const Avatar = ({ person, size }) => {
+const Avatar = ({ person, size = 100 }) => {
    return (
       <img
          src={getImageUrl(person)}
