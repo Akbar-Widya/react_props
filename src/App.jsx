@@ -41,6 +41,9 @@ const Item = ({ item, onUpdateName }) => {
    const handleNameChange = (e) => {
       setName(e.target.value);
    };
+   useEffect(() => {
+      setName(item.name)
+   }, [item])
    return (
       <li>
          {item.name}
