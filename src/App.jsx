@@ -1,63 +1,32 @@
-import { useState, useEffect } from "react";
-
-// It's hard to distinguish inside react codebase. The props seems confusing.
-// But when you practice the workflow difference between interaction component (reading input) & display component (showing data)
-// then the Swiss army knife approach (props) is very convenient. Such a minimum learning curve.
-// I mean you don't need to remember many different syntax for different use cases, as long as you understand the workflow difference.
-// It's different from other frameworks like Vue or Angular where they have different syntax for different use cases. 
+import { useEffect, useState } from "react";
 
 const fakeUsers = [
-   {
-      id: "1",
-      name: "Robin",
-   },
-   {
-      id: "2",
-      name: "Dennis",
-   },
+   { id: 1, name: "Alice" },
+   { id: 2, name: "Bob" },
+   { id: 3, name: "Charlie" },
 ];
 
-function getFakeUsers() {
-   return new Promise((resolve) => setTimeout(() => resolve(fakeUsers), 2000));
-}
+const getFakeUsers = () => {
+   return new Promise((resolve) => {
+      setTimeout(() => resolve(fakeUsers), 2000);
+   });
+};
 
-function App() {
-   const [users, setUsers] = useState([]);
+const updateFakeUserName = (users, id, name) => {
+   const updatedUsers = users.map((user) => {
+      if (user.id === id) {
+         return { ...user, name };
+      } else {
+         return user;
+      }
+   });
 
-   useEffect(() => {
-      const fetchUsers = async () => {
-         const data = await getFakeUsers();
+   return new Promise((resolve) => {
+      setTimeout(() => resolve(updatedUsers), 2000);
+   });
+};
 
-         setUsers(data);
-      };
-
-      fetchUsers();
-   }, []);
-
-   function handleUpdateName(item, name) {
-      const newUsers = users.map((user) => {
-         if (user.id === item.id) {
-            return {
-               id: user.id,
-               name: name,
-            }
-         } else {
-            return user
-         }
-      })
-      setUsers(newUsers);
-   } 
-
-   return (
-      <div>
-         <h1>Derive State from Props in </h1>
-
-         <List list={users} onUpdateName={handleUpdateName} />
-      </div>
-   );
-}
-
-function List({ list, onUpdateName }) {
+const List = ({ list, onUpdateName }) => {
    return (
       <ul>
          {list.map((item) => (
@@ -65,22 +34,42 @@ function List({ list, onUpdateName }) {
          ))}
       </ul>
    );
-}
+};
 
-function Item({ item, onUpdateName }) {
+const Item = ({ item, onUpdateName }) => {
    const [name, setName] = useState(item.name);
-   function handleNameChange(e) {
+   const handleNameChange = (e) => {
       setName(e.target.value);
-   }
+   };
    return (
       <li>
-         <span>{item.name}</span>
+         {item.name}
          <input type="text" value={name} onChange={handleNameChange} />
-         <button onClick={() => onUpdateName(item, name)}>
-            Update
-         </button>
+         <button onClick={() => onUpdateName(item, name)}>Update</button>
       </li>
    );
-}
+};
 
+const App = () => {
+   const [users, setUsers] = useState([]);
+
+   useEffect(() => {
+      const fetchUsers = async () => {
+         const data = await getFakeUsers();
+         setUsers(data);
+      };
+      fetchUsers();
+   }, []);
+
+   const handleUpdateName = async (item, name) => {
+      const newUsers = await updateFakeUserName(users, item.id, name);
+      setUsers(newUsers);
+   };
+   return (
+      <div>
+         <h1>Change Your Currency</h1>
+         <List list={users} onUpdateName={handleUpdateName} />
+      </div>
+   );
+};
 export default App;
