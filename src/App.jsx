@@ -1,78 +1,57 @@
-import { useEffect, useState } from "react";
+import { getImageUrl } from './utils.js';
 
-const fakeUsers = [
-   { id: 1, name: "Alice" },
-   { id: 2, name: "Bob" },
-   { id: 3, name: "Charlie" },
-];
-
-const getFakeUsers = () => {
-   return new Promise((resolve) => {
-      setTimeout(() => resolve(fakeUsers), 2000);
-   });
-};
-
-const updateFakeUserName = (users, id, name) => {
-   const updatedUsers = users.map((user) => {
-      if (user.id === id) {
-         return { ...user, name };
-      } else {
-         return user;
-      }
-   });
-
-   return new Promise((resolve) => {
-      setTimeout(() => resolve(updatedUsers), 2000);
-   });
-};
-
-const List = ({ list, onUpdateName }) => {
-   return (
-      <ul>
-         {list.map((item) => (
-            <Item key={item.id} item={item} onUpdateName={onUpdateName} />
-         ))}
-      </ul>
-   );
-};
-
-const Item = ({ item, onUpdateName }) => {
-   const [name, setName] = useState(item.name);
-   const handleNameChange = (e) => {
-      setName(e.target.value);
-   };
-   useEffect(() => {
-      setName(item.name)
-   }, [item])
-   return (
-      <li>
-         {item.name}
-         <input type="text" value={name} onChange={handleNameChange} />
-         <button onClick={() => onUpdateName(item, name)}>Update</button>
-      </li>
-   );
-};
-
-const App = () => {
-   const [users, setUsers] = useState([]);
-
-   useEffect(() => {
-      const fetchUsers = async () => {
-         const data = await getFakeUsers();
-         setUsers(data);
-      };
-      fetchUsers();
-   }, []);
-
-   const handleUpdateName = async (item, name) => {
-      const newUsers = await updateFakeUserName(users, item.id, name);
-      setUsers(newUsers);
-   };
-   return (
-      <div>
-         <h1>Change Your Currency</h1>
-         <List list={users} onUpdateName={handleUpdateName} />
-      </div>
-   );
-};
-export default App;
+export default function Gallery() {
+  return (
+    <div>
+      <h1>Notable Scientists</h1>
+      <section className="profile">
+        <h2>Maria Skłodowska-Curie</h2>
+        <img
+          className="avatar"
+          src={getImageUrl('szV5sdG')}
+          alt="Maria Skłodowska-Curie"
+          width={70}
+          height={70}
+        />
+        <ul>
+          <li>
+            <b>Profession: </b> 
+            physicist and chemist
+          </li>
+          <li>
+            <b>Awards: 4 </b> 
+            (Nobel Prize in Physics, Nobel Prize in Chemistry, Davy Medal, Matteucci Medal)
+          </li>
+          <li>
+            <b>Discovered: </b>
+            polonium (chemical element)
+          </li>
+        </ul>
+      </section>
+      <section className="profile">
+        <h2>Katsuko Saruhashi</h2>
+        <img
+          className="avatar"
+          src={getImageUrl('YfeOqp2')}
+          alt="Katsuko Saruhashi"
+          width={70}
+          height={70}
+        />
+        <ul>
+          <li>
+            <b>Profession: </b> 
+            geochemist
+          </li>
+          <li>
+            <b>Awards: 2 </b> 
+            (Miyake Prize for geochemistry, Tanaka Prize)
+          </li>
+          <li>
+            <b>Discovered: </b>
+            a method for measuring carbon dioxide in seawater
+          </li>
+        </ul>
+      </section>
+    </div>
+  );
+}
